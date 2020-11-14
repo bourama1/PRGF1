@@ -5,6 +5,7 @@ import rasterize.Raster;
 public class SeedFill implements Filler {
     private final Raster raster;
     private int seedX,seedY;
+    private PatternFill pattern = new PatternFillCircle();
 
     public SeedFill(Raster raster) {
         this.raster = raster;
@@ -23,7 +24,7 @@ public class SeedFill implements Filler {
     private void seedFill(int seedX, int seedY, int fillColor, int backgroundColor){
         if(raster.getPixel(seedX,seedY) == backgroundColor) //jsme uvnitr
         {
-            raster.setPixel(seedX, seedY, fillColor);
+            raster.setPixel(seedX, seedY, pattern.paint(seedX,seedY));
             seedFill(seedX+1,seedY,fillColor,backgroundColor);
             seedFill(seedX-1,seedY,fillColor,backgroundColor);
             seedFill(seedX,seedY+1,fillColor,backgroundColor);
@@ -33,3 +34,4 @@ public class SeedFill implements Filler {
 
     }
 }
+

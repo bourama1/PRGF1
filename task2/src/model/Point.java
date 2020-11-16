@@ -1,8 +1,7 @@
 package model;
 
 public class Point {
-
-    public int x, y;
+    private final int x, y;
 
     public Point(int x, int y) {
         this.x = x;
@@ -14,6 +13,15 @@ public class Point {
         this.y = (int) Math.round(y);
     }
 
-    //TODO
+    public Point(Point p) {
+        this.x = p.getX();
+        this.y = p.getY();
+    }
 
+    public int getY(){return y;}
+    public int getX(){return x;}
+
+    double distanceTo(Point p){
+        return Math.sqrt((p.getY() - this.y) * (p.getY() - this.y) + (p.getX() - this.x) * (p.getX() - this.x));
+    }
 }

@@ -18,8 +18,8 @@ public class Edge {
 
     Vertex v1,v2;
     Edge(int index, Polygon polygon){
-        v1 = new Vertex(polygon.points.get(index).x, polygon.points.get(index).y);
-        v2 = new Vertex(polygon.points.get(index+1).x, polygon.points.get(index+1).y);
+        v1 = new Vertex(polygon.points.get(index).getX(), polygon.points.get(index).getY());
+        v2 = new Vertex(polygon.points.get(index+1).getX(), polygon.points.get(index+1).getY());
     }
 
     void test(){

@@ -1,6 +1,7 @@
 package control;
 
 import fill.SeedFill;
+import fill.SeedFillBorder;
 import rasterize.*;
 import view.Panel;
 
@@ -13,7 +14,7 @@ public class Controller2D implements Controller {
 
     private int x,y;
     private LineRasterizerGraphics rasterizer;
-    private SeedFill seedFill;
+    private SeedFillBorder seedFill;
 
     public Controller2D(Panel panel) {
         this.panel = panel;
@@ -22,8 +23,9 @@ public class Controller2D implements Controller {
     }
 
     public void initObjects(Raster raster) {
-        seedFill = new SeedFill(raster);
+        seedFill = new SeedFillBorder(raster);
         rasterizer = new LineRasterizerGraphics(raster);
+        rasterizer.setColor(0x00ff00);
     }
 
     //*******************************************************************************************************************

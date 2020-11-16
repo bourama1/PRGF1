@@ -1,7 +1,7 @@
 package fill;
 
-public interface Filler {
+import java.awt.*;
 
+public interface Filler {
     void fill();
-    //void setFillColor(int color);
 }

@@ -1,20 +1,24 @@
 package model;
 
 public class Line {
-
-    int  x1, x2, y1, y2;
-    //private final int color;
-
-    public Line(int x1, int y1, int x2, int y2, int color) {
-        //TODO
-    }
+    private final Point p1;
+    private final Point p2;
+    private final int color;
 
     public Line(Point p1, Point p2, int color) {
-        //TODO
+        this.p1 = new Point(p1);
+        this.p2 = new Point(p2);
+        this.color = color;
     }
 
+    public Point GetP1(){return p1;}
+
+    public Point GetP2(){return p2;}
+
+    public int GetColor(){return color;}
+
     public boolean isHorizontal() {
-        return y1 == y2;
+        return p1.getY() == p2.getY();
     }
 
     public Line setOrientation() {
@@ -22,7 +26,7 @@ public class Line {
     }
 
     public boolean isIntersection(int y) {
-        return (y>=y1) && y<=y2;
+        return (y >= p1.getY()) && ( y <= p2.getY());
     }
 
     public int getIntersection(int y) {

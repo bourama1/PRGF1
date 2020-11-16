@@ -4,11 +4,14 @@ import rasterize.Raster;
 
 public class SeedFill implements Filler {
     private final Raster raster;
+    private int rasterWidth, rasterHeight;
     private int seedX,seedY;
     private PatternFill pattern = new PatternFillCircle();
 
     public SeedFill(Raster raster) {
         this.raster = raster;
+        this.rasterWidth = raster.getWidth();
+        this.rasterHeight = raster.getWidth();
     }
 
     public void setSeed(int x, int y){
@@ -18,20 +21,20 @@ public class SeedFill implements Filler {
 
     @Override
     public void fill() {
-        seedFill(seedX,seedY,0xffff00, raster.getPixel(seedX,seedY));
+        seedFill(seedX,seedY,0xff0000, raster.getPixel(seedX,seedY));
     }
 
     private void seedFill(int seedX, int seedY, int fillColor, int backgroundColor){
-        if(raster.getPixel(seedX,seedY) == backgroundColor) //jsme uvnitr
+        if(raster.getPixel(seedX,seedY) == backgroundColor
+                && rasterWidth > seedX && rasterHeight > seedY
+                && seedX > 0 && seedY > 0) //jsme uvnitr
         {
             raster.setPixel(seedX, seedY, pattern.paint(seedX,seedY));
             seedFill(seedX+1,seedY,fillColor,backgroundColor);
             seedFill(seedX-1,seedY,fillColor,backgroundColor);
             seedFill(seedX,seedY+1,fillColor,backgroundColor);
             seedFill(seedX,seedY-1,fillColor,backgroundColor);
-
         }
-
     }
 }
 

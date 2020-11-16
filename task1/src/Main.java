@@ -159,7 +159,6 @@ public class Main {
 	public void clear(int color) {
 		raster.setClearColor(color);
 		raster.clear();
-		
 	}
 
 	public void present(Graphics graphics) {

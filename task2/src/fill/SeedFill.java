@@ -6,7 +6,7 @@ public class SeedFill implements Filler {
     private final Raster raster;
     private int rasterWidth, rasterHeight;
     private int seedX,seedY;
-    private PatternFill pattern = new PatternFillCircle();
+    private PatternFill pattern = new PatternFillCross();
 
     public SeedFill(Raster raster) {
         this.raster = raster;

@@ -9,8 +9,10 @@ import java.util.List;
 
 public class PolygonRasterizer {
     private FilledLineRasterizer lr;
-    public PolygonRasterizer(FilledLineRasterizer lineRasterizer){
+    private DashLineRasterizer rasterizerDashed;
+    public PolygonRasterizer(FilledLineRasterizer lineRasterizer, DashLineRasterizer rasterizerDashed){
         lr = lineRasterizer;
+        this.rasterizerDashed = rasterizerDashed;
     }
 
     public void rasterize(Polygon polygon, Color outlineColor){
@@ -25,5 +27,11 @@ public class PolygonRasterizer {
         }
         //Propojeni prvniho a posledniho bodu polygonu
         lr.rasterize(polygon.getPoint(0), polygon.getPoint(size - 1), outlineColor);
+    }
+
+    public void rasterizeDash(Polygon polygon, int x, int y) {
+        int i = polygon.getPointsSize() - 1;
+        rasterizerDashed.rasterize(polygon.getPoint(0).getX(), polygon.getPoint(0).getY(), x, y, Color.RED);
+        rasterizerDashed.rasterize(polygon.getPoint(i).getX(), polygon.getPoint(i).getY(), x, y, Color.RED);
     }
 }

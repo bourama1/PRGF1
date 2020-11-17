@@ -19,7 +19,7 @@ public class Controller2D implements Controller {
     private final Panel panel;
 
     private int x,y;
-    private LineRasterizerGraphics rasterizer;
+    private boolean dashedPolygon = false;
     private SeedFill seedFill;
     private SeedFillBorder seedFillBorder;
     private ScanLine scanLine;
@@ -39,9 +39,7 @@ public class Controller2D implements Controller {
         seedFill = new SeedFill(raster);
         seedFillBorder = new SeedFillBorder(raster);
         scanLine = new ScanLine(raster);
-        rasterizer = new LineRasterizerGraphics(raster);
-        rasterizer.setColor(0x00ff00);
-        polygonRasterizer = new PolygonRasterizer(new FilledLineRasterizer(raster));
+        polygonRasterizer = new PolygonRasterizer(new FilledLineRasterizer(raster), new DashLineRasterizer(raster));
         polygonClip = new Clipper();
     }
 
@@ -50,7 +48,7 @@ public class Controller2D implements Controller {
         panel.addMouseListener(new MouseAdapter() {
 
             @Override
-            public void mousePressed(MouseEvent e) {
+            public void mouseReleased(MouseEvent e) {
                 if (e.isShiftDown()) {
                     if (SwingUtilities.isMiddleMouseButton(e)) {
                         seedFillBorder.setSeed(e.getX(), e.getY());
@@ -75,16 +73,13 @@ public class Controller2D implements Controller {
         panel.addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                if (e.isControlDown()) return;
-
-                if (e.isShiftDown()) {
-                    //TODO
-                } else if (SwingUtilities.isLeftMouseButton(e)) {
-                    //TODO
-                } else if (SwingUtilities.isRightMouseButton(e)) {
-                    //TODO
-                } else if (SwingUtilities.isMiddleMouseButton(e)) {
-                    //TODO
+                if (SwingUtilities.isLeftMouseButton(e)) {
+                    if (polygon.getPointsSize() > 0) {
+                        x = e.getX();
+                        y = e.getY();
+                        dashedPolygon = true;
+                        updatePolygon();
+                    }
                 }
             }
         });
@@ -115,6 +110,11 @@ public class Controller2D implements Controller {
 
     private void updatePolygon() {
         hardClear();
+
+        if (dashedPolygon)
+            polygonRasterizer.rasterizeDash(polygon, x, y);
+        dashedPolygon = false;
+
         if (clipPolygon.getPointsSize() >= 3) {
             outPolygon = Clipper.clip(polygon, clipPolygon);
             polygonRasterizer.rasterize(outPolygon, Color.WHITE);

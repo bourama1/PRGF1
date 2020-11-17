@@ -12,7 +12,6 @@ import view.Panel;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 
 public class Controller2D implements Controller {
 
@@ -23,11 +22,10 @@ public class Controller2D implements Controller {
     private SeedFill seedFill;
     private SeedFillBorder seedFillBorder;
     private ScanLine scanLine;
-    private Polygon polygon = new Polygon();
-    private Polygon clipPolygon = new Polygon();
+    private final Polygon polygon = new Polygon();
+    private final Polygon clipPolygon = new Polygon();
     private Polygon outPolygon = new Polygon();
     private PolygonRasterizer polygonRasterizer;
-    private Clipper polygonClip;
 
     public Controller2D(Panel panel) {
         this.panel = panel;
@@ -40,7 +38,6 @@ public class Controller2D implements Controller {
         seedFillBorder = new SeedFillBorder(raster);
         scanLine = new ScanLine(raster);
         polygonRasterizer = new PolygonRasterizer(new FilledLineRasterizer(raster), new DashLineRasterizer(raster));
-        polygonClip = new Clipper();
     }
 
     @Override

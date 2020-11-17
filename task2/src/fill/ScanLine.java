@@ -15,10 +15,10 @@ import java.util.*;
 public class ScanLine implements Filler {
     private final Raster raster;
     private Polygon poly;
-    private ArrayList<Line> lines = new ArrayList<Line>();
+    private final ArrayList<Line> lines = new ArrayList<Line>();
     private int fillColor;
     private Color outlineColor;
-    private LineRasterizer lr;
+    private final LineRasterizer lr;
 
     public ScanLine(Raster raster) {
         this.raster = raster;
@@ -94,7 +94,7 @@ public class ScanLine implements Filler {
     }
 
     private static void bubbleSort(ArrayList<Integer> array) {
-        int temp = 0;
+        int temp;
         int size = array.size();
         for(int i=0; i < size; i++){
             for(int j=1; j < (size-i); j++){

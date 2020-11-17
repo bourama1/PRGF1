@@ -1,6 +1,5 @@
 package clip;
 
-import model.Line;
 import model.Point;
 import model.Polygon;
 
@@ -17,13 +16,10 @@ public class Clipper {
         int size = clipPoly.getPointsSize();
         List<Point> inPolyPoints = inPoly.getPoints(); //vytvorim si list bodu puvodniho polygonu abych si je neprepsal
         List<Point> newPoints = inPolyPoints;
-        Point p1 = clipPoly.getPoint(size - 1);
-        int i = 0;
-        for (Point p2 : clipPoly.getPoints()) {
+
+        for (int i = 0; i < size; i++) {
             newPoints = clipEdge(inPolyPoints, new Edge(i, clipPoly));
             inPolyPoints = newPoints;
-            p1 = p2;
-            i++;
         }
         return new Polygon(newPoints);
     }

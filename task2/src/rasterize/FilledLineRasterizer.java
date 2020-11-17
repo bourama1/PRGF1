@@ -1,7 +1,5 @@
 package rasterize;
 
-import model.Point;
-
 public class FilledLineRasterizer extends LineRasterizer {
 
     public FilledLineRasterizer(Raster raster) {

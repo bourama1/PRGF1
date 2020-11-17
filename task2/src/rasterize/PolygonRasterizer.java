@@ -1,15 +1,12 @@
 package rasterize;
 
-import model.Line;
-import model.Point;
 import model.Polygon;
 
 import java.awt.*;
-import java.util.List;
 
 public class PolygonRasterizer {
-    private FilledLineRasterizer lr;
-    private DashLineRasterizer rasterizerDashed;
+    private final FilledLineRasterizer lr;
+    private final DashLineRasterizer rasterizerDashed;
     public PolygonRasterizer(FilledLineRasterizer lineRasterizer, DashLineRasterizer rasterizerDashed){
         lr = lineRasterizer;
         this.rasterizerDashed = rasterizerDashed;

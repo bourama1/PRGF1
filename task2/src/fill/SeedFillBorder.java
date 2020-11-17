@@ -7,9 +7,10 @@ import java.awt.*;
 
 public class SeedFillBorder implements Filler {
     private final Raster raster;
-    private int rasterWidth, rasterHeight;
+    private final int rasterWidth;
+    private final int rasterHeight;
     private int seedX,seedY;
-    private PatternFill pattern = new PatternFillCircle();
+    private final PatternFill pattern = new PatternFillCircle();
     private Color borderColor;
 
     public SeedFillBorder(Raster raster) {

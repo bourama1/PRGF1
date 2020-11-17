@@ -11,12 +11,6 @@ public class Line {
         this.color = color;
     }
 
-    public Line(int x1, int y1, int x2, int y2, int color) {
-        this.p1 = new Point(x1, y1);
-        this.p2 = new Point(x2, y2);
-        this.color = color;
-    }
-
     public Point GetP1(){return p1;}
 
     public Point GetP2(){return p2;}

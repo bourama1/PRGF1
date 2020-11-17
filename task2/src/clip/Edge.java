@@ -4,7 +4,8 @@ import model.Polygon;
 import model.Point;
 
 public class Edge {
-    private Vertex p1,p2;
+    private final Vertex p1;
+    private final Vertex p2;
     Edge(int index, Polygon polygon){
         //Kontrola prekroceni hranice, v tomhle pripade vezmu prvni/nulty bod misto dalsiho
         if (index == polygon.getPointsSize() - 1) {
@@ -31,12 +32,9 @@ public class Edge {
         return new Point(px, py);
     }
 
-    private class Vertex{
-        private double x,y;
-
-        Vertex(Vertex v){
-            this(v.x, v.y);
-        }
+    private static class Vertex{
+        private final double x;
+        private final double y;
 
         Vertex(double x, double y){
             this.x = x;

@@ -13,38 +13,13 @@ public class Clipper {
 
     }
 
-   /* public static Polygon clip(Polygon inPoly, Polygon clipPoly){
-        Polygon outPoly = new Polygon();
-        int sizeClip = clipPoly.points.size();
-        for (int i= 0; i < sizeClip; i++){
-            Edge edge = new Edge(i,clipPoly);
-            outPoly.clear();
-            Point v1 = clipPoly.points.get(sizeClip - 1);
-            for (Point v2 : clipPoly.points){
-                if (edge.inside(v2)){
-                    if (!edge.inside(v1))
-                    outPoly.points.add(edge.intersection(v1,v2)); //var.4
-                    outPoly.points.add(v2); //var.1,4
-                }else{
-                    if (edge.inside(v1))
-                    outPoly.points.add(edge.intersection(v1,v2)); //var.2
-                }
-                v1 = v2;
-            } 
-            //aktualizuj ořezávaný polygon
-        }
-
-        //TODO
-        return outPoly;
-    }*/
-
     public static Polygon clip(Polygon inPoly, Polygon clipPoly){
-        int size = clipPoly.points.size();
-        List<Point> inPolyPoints = inPoly.points;
+        int size = clipPoly.getPointsSize();
+        List<Point> inPolyPoints = inPoly.getPoints(); //vytvorim si list bodu puvodniho polygonu abych si je neprepsal
         List<Point> newPoints = inPolyPoints;
-        Point p1 = clipPoly.points.get(size - 1);
+        Point p1 = clipPoly.getPoint(size - 1);
         int i = 0;
-        for (Point p2 : clipPoly.points) {
+        for (Point p2 : clipPoly.getPoints()) {
             newPoints = clipEdge(inPolyPoints, new Edge(i, clipPoly));
             inPolyPoints = newPoints;
             p1 = p2;

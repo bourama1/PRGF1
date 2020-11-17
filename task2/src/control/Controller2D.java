@@ -51,21 +51,22 @@ public class Controller2D implements Controller {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                if (e.isControlDown()) return;
-
                 if (e.isShiftDown()) {
+                    if (SwingUtilities.isMiddleMouseButton(e)) {
+                        seedFillBorder.setSeed(e.getX(), e.getY());
+                        seedFillBorder.setBorderColor(Color.CYAN);
+                        seedFillBorder.fill();
+                    }
                 } else if (SwingUtilities.isLeftMouseButton(e)) {
                     Point p = new Point(e.getX(), e.getY());
-                    polygon.points.add(p);
+                    polygon.addPoint(p);
                     updatePolygon();
                 } else if (SwingUtilities.isMiddleMouseButton(e)) {
-                    if (SwingUtilities.isMiddleMouseButton(e)) {
-                        seedFill.setSeed(e.getX(), e.getY());
-                        seedFill.fill();
-                    }
+                    seedFill.setSeed(e.getX(), e.getY());
+                    seedFill.fill();
                 } else if (SwingUtilities.isRightMouseButton(e)) {
                     Point p = new Point(e.getX(), e.getY());
-                    clipPolygon.points.add(p);
+                    clipPolygon.addPoint(p);
                     updatePolygon();
                 }
             }
@@ -114,19 +115,18 @@ public class Controller2D implements Controller {
 
     private void updatePolygon() {
         hardClear();
-        if (clipPolygon.points.size() >= 3)
+        if (clipPolygon.getPointsSize() >= 3) {
             outPolygon = Clipper.clip(polygon, clipPolygon);
-        if (polygon.points.size() > 0)
-            polygonRasterizer.rasterize(polygon, Color.CYAN);
-        if (clipPolygon.points.size() > 0)
-            polygonRasterizer.rasterize(clipPolygon, Color.RED);
-        if (outPolygon.points.size() > 0) {
             polygonRasterizer.rasterize(outPolygon, Color.WHITE);
             scanLine.setFillColor(Color.WHITE.getRGB());
             scanLine.setOutlineColor(Color.WHITE);
             scanLine.setPoly(outPolygon);
             scanLine.fill();
         }
+        if (polygon.getPointsSize() > 0)
+            polygonRasterizer.rasterize(polygon, Color.CYAN);
+        if (clipPolygon.getPointsSize() > 0)
+            polygonRasterizer.rasterize(clipPolygon, Color.RED);
     }
 
     private void hardClear() {

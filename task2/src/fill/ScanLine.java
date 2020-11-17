@@ -44,22 +44,23 @@ public class ScanLine implements Filler {
     }
 
     private void process(){
-        int yMin = poly.points.get(0).getY(), yMax=0;
+        int yMin = poly.getPoint(0).getY(), yMax=0;
+        int size = poly.getPointsSize();
         ArrayList<Integer> intersections = new ArrayList<Integer>();
-        for (int i=0; i<poly.points.size(); i++){
+        for (int i=0; i < size; i++){
             Line line = new Line(
-                    poly.points.get(i),
-                    poly.points.get((i+1)%poly.points.size()),
+                    poly.getPoint(i),
+                    poly.getPoint((i+1) % size),
                     0x0
             );
             if(!line.isHorizontal())
                 lines.add(line.setOrientation());
 
                 //hledani yMin a yMax
-                if (yMin >= poly.points.get(i).getY())
-                    yMin = poly.points.get(i).getY();
-                if (yMax <= poly.points.get(i).getY())
-                    yMax = poly.points.get(i).getY();
+                if (yMin >= poly.getPoint(i).getY())
+                    yMin = poly.getPoint(i).getY();
+                if (yMax <= poly.getPoint(i).getY())
+                    yMax = poly.getPoint(i).getY();
 
         }
 
@@ -83,11 +84,11 @@ public class ScanLine implements Filler {
             }
         }
 
-        for (int i = 0; i < poly.points.size(); i++) {
-            int x1 = (poly.points.get(i)).getX();
-            int y1 = (poly.points.get(i)).getY();
-            int x2 = (poly.points.get((i + 1) % poly.points.size())).getX();
-            int y2 = (poly.points.get((i + 1) % poly.points.size())).getY();
+        for (int i = 0; i < size; i++) {
+            int x1 = (poly.getPoint(i)).getX();
+            int y1 = (poly.getPoint(i)).getY();
+            int x2 = (poly.getPoint((i + 1) % size)).getX();
+            int y2 = (poly.getPoint((i + 1) % size)).getY();
             this.lr.rasterize(x1, y1, x2, y2, outlineColor);
         }
     }

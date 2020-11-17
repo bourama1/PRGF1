@@ -14,16 +14,16 @@ public class PolygonRasterizer {
     }
 
     public void rasterize(Polygon polygon, Color outlineColor){
-        int size = polygon.points.size();
+        int size = polygon.getPointsSize();
         for (int i = 0; i < size; i++){
             //Pro prvni bod vykreslim pouze pixel
             if (i == 0){
-                lr.raster.setPixel(polygon.points.get(i).getX(), polygon.points.get(i).getY(), outlineColor.getRGB());
+                lr.raster.setPixel(polygon.getPoint(i).getX(), polygon.getPoint(i).getY(), outlineColor.getRGB());
             } else {
-                lr.rasterize(polygon.points.get(i - 1), polygon.points.get(i), outlineColor);
+                lr.rasterize(polygon.getPoint(i - 1), polygon.getPoint(i), outlineColor);
             }
         }
         //Propojeni prvniho a posledniho bodu polygonu
-        lr.rasterize(polygon.points.get(0), polygon.points.get(size - 1), outlineColor);
+        lr.rasterize(polygon.getPoint(0), polygon.getPoint(size - 1), outlineColor);
     }
 }

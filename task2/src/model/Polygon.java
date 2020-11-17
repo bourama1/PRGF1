@@ -4,13 +4,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Polygon {
-    public List<Point> points = new ArrayList<>();
+    private List<Point> points = new ArrayList<>();
 
     public Polygon(){
     }
 
     public Polygon(List<Point> points){
         this.points = points;
+    }
+
+    public int getPointsSize(){
+        return points.size();
+    }
+
+    public List<Point> getPoints(){
+        return points;
+    }
+
+    public Point getPoint(int index){
+        return points.get(index);
+    }
+
+    public void addPoint(Point p){
+        points.add(p);
     }
 
     public int closePoint(Point p){

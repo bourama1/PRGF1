@@ -29,7 +29,7 @@ public class SeedFillBorder implements Filler {
 
     @Override
     public void fill() {
-        seedFill(seedX,seedY,Color.RED, borderColor);
+        seedFill(seedX,seedY,Color.GREEN, borderColor);
     }
 
     //Rekurzivne udelany seedFill ktery vyplnuje barvou a hlida si barvu hranice plus vlastni barvu, aby nebarvil jiz obarvene

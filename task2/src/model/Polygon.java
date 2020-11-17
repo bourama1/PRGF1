@@ -21,4 +21,8 @@ public class Polygon {
         }
         return index;
     }
+
+    public void clear() {
+        points.clear();
+    }
 }

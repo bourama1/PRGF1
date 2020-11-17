@@ -21,13 +21,5 @@ public class Edge {
         v1 = new Vertex(polygon.points.get(index).getX(), polygon.points.get(index).getY());
         v2 = new Vertex(polygon.points.get(index+1).getX(), polygon.points.get(index+1).getY());
     }
-
-    void test(){
-        Vertex a, b;
-        a = new Vertex(1,2);
-        b = new Vertex(a);
-        a.x = 3;
-
-    }
 }
 

@@ -23,6 +23,7 @@ public class Controller2D implements Controller {
     private SeedFillBorder seedFillBorder;
     private ScanLine scanLine;
     private Polygon polygon = new Polygon();
+    private Polygon clipPolygon = new Polygon();
     private PolygonRasterizer polygonRasterizer;
 
     public Controller2D(Panel panel) {
@@ -51,18 +52,18 @@ public class Controller2D implements Controller {
                 if (e.isShiftDown()) {
                     //TODO
                 } else if (SwingUtilities.isLeftMouseButton(e)) {
-                    hardClear();
                     Point p = new Point(e.getX(), e.getY());
                     polygon.points.add(p);
-                    polygonRasterizer.rasterize(polygon, Color.CYAN);
+                    updatePolygon();
                 } else if (SwingUtilities.isMiddleMouseButton(e)) {
-                    seedFill.setSeed(e.getX(),e.getY());
-                    seedFill.fill();
-                } else if (SwingUtilities.isRightMouseButton(e)) {
                     scanLine.setFillColor(Color.YELLOW.getRGB());
                     scanLine.setOutlineColor(Color.GREEN);
                     scanLine.setPoly(polygon);
                     scanLine.fill();
+                } else if (SwingUtilities.isRightMouseButton(e)) {
+                    Point p = new Point(e.getX(), e.getY());
+                    clipPolygon.points.add(p);
+                    updatePolygon();
                 }
             }
         });
@@ -92,7 +93,8 @@ public class Controller2D implements Controller {
                 if (e.getKeyCode() == KeyEvent.VK_C) {
                     x = 0;
                     y = 0;
-                    polygon.points.clear();
+                    polygon.clear();
+                    clipPolygon.clear();
                     hardClear();
                 }
             }
@@ -105,6 +107,14 @@ public class Controller2D implements Controller {
                 initObjects(panel.getRaster());
             }
         });
+    }
+
+    private void updatePolygon() {
+        hardClear();
+        if (polygon.points.size() > 0)
+            polygonRasterizer.rasterize(polygon, Color.CYAN);
+        if (clipPolygon.points.size() > 0)
+            polygonRasterizer.rasterize(clipPolygon, Color.RED);
     }
 
     private void update() {

@@ -1,12 +1,17 @@
 package control;
 
+import fill.ScanLine;
 import fill.SeedFill;
 import fill.SeedFillBorder;
+import model.Point;
+import model.Polygon;
 import rasterize.*;
 import view.Panel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class Controller2D implements Controller {
 
@@ -14,7 +19,11 @@ public class Controller2D implements Controller {
 
     private int x,y;
     private LineRasterizerGraphics rasterizer;
-    private SeedFillBorder seedFill;
+    private SeedFill seedFill;
+    private SeedFillBorder seedFillBorder;
+    private ScanLine scanLine;
+    private Polygon polygon = new Polygon();
+    private PolygonRasterizer polygonRasterizer;
 
     public Controller2D(Panel panel) {
         this.panel = panel;
@@ -23,9 +32,12 @@ public class Controller2D implements Controller {
     }
 
     public void initObjects(Raster raster) {
-        seedFill = new SeedFillBorder(raster);
+        seedFill = new SeedFill(raster);
+        seedFillBorder = new SeedFillBorder(raster);
+        scanLine = new ScanLine(raster);
         rasterizer = new LineRasterizerGraphics(raster);
         rasterizer.setColor(0x00ff00);
+        polygonRasterizer = new PolygonRasterizer(new FilledLineRasterizer(raster));
     }
 
     @Override
@@ -39,14 +51,18 @@ public class Controller2D implements Controller {
                 if (e.isShiftDown()) {
                     //TODO
                 } else if (SwingUtilities.isLeftMouseButton(e)) {
-                    rasterizer.drawLine(x,y,e.getX(),e.getY());
-                    x = e.getX();
-                    y = e.getY();
+                    Point p = new Point(e.getX(), e.getY());
+                    polygon.points.add(p);
+                    polygonRasterizer.rasterize(polygon, Color.CYAN);
                 } else if (SwingUtilities.isMiddleMouseButton(e)) {
-                    //TODO
+                    seedFillBorder.setSeed(e.getX(),e.getY());
+                    seedFillBorder.setBorderColor(Color.CYAN);
+                    seedFillBorder.fill();
                 } else if (SwingUtilities.isRightMouseButton(e)) {
-                    seedFill.setSeed(e.getX(),e.getY());
-                    seedFill.fill();
+                    scanLine.setFillColor(Color.YELLOW.getRGB());
+                    scanLine.setOutlineColor(Color.GREEN);
+                    scanLine.setPoly(polygon);
+                    scanLine.fill();
                 }
             }
 
@@ -87,6 +103,7 @@ public class Controller2D implements Controller {
                 if (e.getKeyCode() == KeyEvent.VK_C) {
                     x = 0;
                     y = 0;
+                    polygon.points.clear();
                     hardClear();
                 }
             }

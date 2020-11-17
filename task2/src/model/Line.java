@@ -11,6 +11,12 @@ public class Line {
         this.color = color;
     }
 
+    public Line(int x1, int y1, int x2, int y2, int color) {
+        this.p1 = new Point(x1, y1);
+        this.p2 = new Point(x2, y2);
+        this.color = color;
+    }
+
     public Point GetP1(){return p1;}
 
     public Point GetP2(){return p2;}
@@ -22,15 +28,27 @@ public class Line {
     }
 
     public Line setOrientation() {
-        return this;
+        if (p1.getY() <= p2.getY())
+            return this;
+        return new Line(p2, p1, color);
     }
 
     public boolean isIntersection(int y) {
-        return (y >= p1.getY()) && ( y <= p2.getY());
+        return (y >= p1.getY()) && ( y < p2.getY());
     }
 
     public int getIntersection(int y) {
-        return 0; //x=ky+q;
+        float k = getK();
+        float q = getQ(k);
+        return Math.round(k * y + q);
+    }
+
+    private float getK() {
+        return (float)(p2.getX() - p1.getX()) / (p2.getY() - p1.getY());
+    }
+
+    private float getQ(float k) {
+        return p1.getX() - k * p1.getY();
     }
 
     //TODO

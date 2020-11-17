@@ -10,6 +10,7 @@ public class SeedFillBorder implements Filler {
     private int rasterWidth, rasterHeight;
     private int seedX,seedY;
     private PatternFill pattern = new PatternFillCircle();
+    private Color borderColor;
 
     public SeedFillBorder(Raster raster) {
         this.raster = raster;
@@ -22,15 +23,21 @@ public class SeedFillBorder implements Filler {
         seedY = y;
     }
 
+    public void setBorderColor(Color borderColor) {
+        this.borderColor = borderColor;
+    }
+
     @Override
     public void fill() {
-        seedFill(seedX,seedY,Color.RED, Color.GREEN);
+        seedFill(seedX,seedY,Color.RED, borderColor);
     }
+
+    //Rekurzivne udelany seedFill ktery vyplnuje barvou a hlida si barvu hranice plus vlastni barvu, aby nebarvil jiz obarvene
 
     private void seedFill(int seedX, int seedY, Color fillColor, Color borderColor){
         if(raster.getPixel(seedX,seedY) != fillColor.getRGB() && raster.getPixel(seedX,seedY) != borderColor.getRGB()
                 && rasterWidth > seedX && rasterHeight > seedY
-                && seedX > 0 && seedY > 0) //jsme uvnitr
+                && seedX > 0 && seedY > 0)
         {
             raster.setPixel(seedX, seedY, fillColor.getRGB());
             seedFill(seedX+1,seedY,fillColor,borderColor);

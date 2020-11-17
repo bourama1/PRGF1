@@ -1,6 +1,7 @@
 package rasterize;
 
 import model.Line;
+import model.Point;
 
 import java.awt.*;
 
@@ -21,11 +22,18 @@ public abstract class LineRasterizer {
     }
 
     public void rasterize(Line line) {
-        //TODO
+        setColor(line.GetColor());
+        drawLine(line.GetP1().getX(), line.GetP1().getY(), line.GetP2().getX(), line.GetP2().getY());
+    }
+
+    public void rasterize(model.Point p1, Point p2, Color color) {
+        setColor(color);
+        drawLine(p1.getX(), p1.getY(), p2.getX(), p2.getY());
     }
 
     public void rasterize(int x1, int y1, int x2, int y2, Color color) {
-        //TODO
+        setColor(color);
+        drawLine(x1, y1, x2, y2);
     }
 
     protected void drawLine(int x1, int y1, int x2, int y2) {

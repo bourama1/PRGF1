@@ -24,10 +24,12 @@ public class SeedFill implements Filler {
         seedFill(seedX,seedY,0xff0000, raster.getPixel(seedX,seedY));
     }
 
+    //Rekurzivne udelany seedFill ktery vyplnuje podle patternu a hlida si barvu pozadi
+
     private void seedFill(int seedX, int seedY, int fillColor, int backgroundColor){
         if(raster.getPixel(seedX,seedY) == backgroundColor
                 && rasterWidth > seedX && rasterHeight > seedY
-                && seedX > 0 && seedY > 0) //jsme uvnitr
+                && seedX > 0 && seedY > 0)
         {
             raster.setPixel(seedX, seedY, pattern.paint(seedX,seedY));
             seedFill(seedX+1,seedY,fillColor,backgroundColor);

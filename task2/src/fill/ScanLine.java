@@ -9,6 +9,9 @@ import rasterize.Raster;
 import java.awt.*;
 import java.util.*;
 
+//ScanLine ktery meni take barvu ohraniceni vybarvene oblasti
+//Implementovan BubbleSort, jehoz hlavni vyhodou je jednoduchost algoritmu a hlavni nevyhodou mozna slozitost az n^2
+
 public class ScanLine implements Filler {
     private final Raster raster;
     private Polygon poly;
@@ -23,6 +26,7 @@ public class ScanLine implements Filler {
     }
 
     public void setPoly(Polygon poly) {
+        lines.clear();
         this.poly = poly;
     }
 
@@ -88,7 +92,6 @@ public class ScanLine implements Filler {
         }
     }
 
-    //BubbleSort
     private static void bubbleSort(ArrayList<Integer> array) {
         int temp = 0;
         int size = array.size();

@@ -51,29 +51,18 @@ public class Controller2D implements Controller {
                 if (e.isShiftDown()) {
                     //TODO
                 } else if (SwingUtilities.isLeftMouseButton(e)) {
+                    hardClear();
                     Point p = new Point(e.getX(), e.getY());
                     polygon.points.add(p);
                     polygonRasterizer.rasterize(polygon, Color.CYAN);
                 } else if (SwingUtilities.isMiddleMouseButton(e)) {
-                    seedFillBorder.setSeed(e.getX(),e.getY());
-                    seedFillBorder.setBorderColor(Color.CYAN);
-                    seedFillBorder.fill();
+                    seedFill.setSeed(e.getX(),e.getY());
+                    seedFill.fill();
                 } else if (SwingUtilities.isRightMouseButton(e)) {
                     scanLine.setFillColor(Color.YELLOW.getRGB());
                     scanLine.setOutlineColor(Color.GREEN);
                     scanLine.setPoly(polygon);
                     scanLine.fill();
-                }
-            }
-
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.isControlDown()) {
-                    if (SwingUtilities.isLeftMouseButton(e)) {
-                        //TODO
-                    } else if (SwingUtilities.isRightMouseButton(e)) {
-                        //TODO
-                    }
                 }
             }
         });
@@ -99,7 +88,7 @@ public class Controller2D implements Controller {
         panel.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                // na klávesu C vymazat plátno
+                //mazani datovych typu a vycisteni platna
                 if (e.getKeyCode() == KeyEvent.VK_C) {
                     x = 0;
                     y = 0;

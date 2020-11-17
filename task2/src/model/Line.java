@@ -50,7 +50,4 @@ public class Line {
     private float getQ(float k) {
         return p1.getX() - k * p1.getY();
     }
-
-    //TODO
-
 }

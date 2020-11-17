@@ -9,6 +9,10 @@ public class Polygon {
     public Polygon(){
     }
 
+    public Polygon(List<Point> points){
+        this.points = points;
+    }
+
     public int closePoint(Point p){
         int index = 0;
         double dist, min = 1000;

@@ -9,25 +9,26 @@ import java.util.List;
 
 public class Clipper {
 
-    public static Polygon clip(Polygon inPoly, Polygon clipPoly){
-        Polygon outPoly = null;
-        int sizeIn = inPoly.points.size();
-        if (clipPoly.points.size()<=2)
-            return inPoly;
-        ArrayList<Line> clipLines;
-        for (int i= 0; i < clipPoly.points.size(); i++){
+    public Clipper(){
+
+    }
+
+   /* public static Polygon clip(Polygon inPoly, Polygon clipPoly){
+        Polygon outPoly = new Polygon();
+        int sizeClip = clipPoly.points.size();
+        for (int i= 0; i < sizeClip; i++){
             Edge edge = new Edge(i,clipPoly);
             outPoly.clear();
-            Point v1 = inPoly.points.get(sizeIn - 1);
-            for (Point v2 : inPoly.points){
-                /*if (v2 inside edge){
-                    if (v1 not inside edge)
-                    outPoly.points.add(intersection(v1,v2,edge)); //var.4
+            Point v1 = clipPoly.points.get(sizeClip - 1);
+            for (Point v2 : clipPoly.points){
+                if (edge.inside(v2)){
+                    if (!edge.inside(v1))
+                    outPoly.points.add(edge.intersection(v1,v2)); //var.4
                     outPoly.points.add(v2); //var.1,4
                 }else{
-                    if (v1 inside edge)
-                    outPoly.points.add(intersection(v1,v2,edge)); //var.2
-                }*/
+                    if (edge.inside(v1))
+                    outPoly.points.add(edge.intersection(v1,v2)); //var.2
+                }
                 v1 = v2;
             } 
             //aktualizuj ořezávaný polygon
@@ -35,18 +36,39 @@ public class Clipper {
 
         //TODO
         return outPoly;
+    }*/
+
+    public static Polygon clip(Polygon inPoly, Polygon clipPoly){
+        int size = clipPoly.points.size();
+        List<Point> inPolyPoints = inPoly.points;
+        List<Point> newPoints = inPolyPoints;
+        Point p1 = clipPoly.points.get(size - 1);
+        int i = 0;
+        for (Point p2 : clipPoly.points) {
+            newPoints = clipEdge(inPolyPoints, new Edge(i, clipPoly));
+            inPolyPoints = newPoints;
+            p1 = p2;
+            i++;
+        }
+        return new Polygon(newPoints);
     }
 
-
-    //volani pres instanci tridy
-    // Polygon inPoly;
-    //Polygon clipPoly;
-    //Clipper clipper = new Clipper();
-    //Polygon outPolygon = clipper.clip(polygon, clipPolygon);
-
-
-    //volani staticke metody tridy
-    //Polygon inPoly;
-    //Polygon clipPoly;
-    //Polygon outPolygon = Clipper.clip(polygon, clipPolygon);
+    private static List<Point> clipEdge(List<Point> points, Edge e) {
+        if (points.size() < 2)
+            return points;
+        List<Point> out = new ArrayList<>();
+        out.clear();
+        Point v1 = points.get(points.size() - 1);
+        for (Point v2 : points) {
+            if (e.inside(v2)) {
+                if (!e.inside(v1))
+                    out.add(e.intersection(v1, v2));
+                out.add(v2);
+            } else if (e.inside(v1)) {
+                out.add(e.intersection(v1, v2));
+            }
+            v1 = v2;
+        }
+        return out;
+    }
 }

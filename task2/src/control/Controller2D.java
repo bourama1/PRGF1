@@ -1,5 +1,6 @@
 package control;
 
+import clip.Clipper;
 import fill.ScanLine;
 import fill.SeedFill;
 import fill.SeedFillBorder;
@@ -24,7 +25,9 @@ public class Controller2D implements Controller {
     private ScanLine scanLine;
     private Polygon polygon = new Polygon();
     private Polygon clipPolygon = new Polygon();
+    private Polygon outPolygon = new Polygon();
     private PolygonRasterizer polygonRasterizer;
+    private Clipper polygonClip;
 
     public Controller2D(Panel panel) {
         this.panel = panel;
@@ -39,6 +42,7 @@ public class Controller2D implements Controller {
         rasterizer = new LineRasterizerGraphics(raster);
         rasterizer.setColor(0x00ff00);
         polygonRasterizer = new PolygonRasterizer(new FilledLineRasterizer(raster));
+        polygonClip = new Clipper();
     }
 
     @Override
@@ -50,16 +54,15 @@ public class Controller2D implements Controller {
                 if (e.isControlDown()) return;
 
                 if (e.isShiftDown()) {
-                    //TODO
                 } else if (SwingUtilities.isLeftMouseButton(e)) {
                     Point p = new Point(e.getX(), e.getY());
                     polygon.points.add(p);
                     updatePolygon();
                 } else if (SwingUtilities.isMiddleMouseButton(e)) {
-                    scanLine.setFillColor(Color.YELLOW.getRGB());
-                    scanLine.setOutlineColor(Color.GREEN);
-                    scanLine.setPoly(polygon);
-                    scanLine.fill();
+                    if (SwingUtilities.isMiddleMouseButton(e)) {
+                        seedFill.setSeed(e.getX(), e.getY());
+                        seedFill.fill();
+                    }
                 } else if (SwingUtilities.isRightMouseButton(e)) {
                     Point p = new Point(e.getX(), e.getY());
                     clipPolygon.points.add(p);
@@ -82,7 +85,6 @@ public class Controller2D implements Controller {
                 } else if (SwingUtilities.isMiddleMouseButton(e)) {
                     //TODO
                 }
-                update();
             }
         });
 
@@ -95,6 +97,7 @@ public class Controller2D implements Controller {
                     y = 0;
                     polygon.clear();
                     clipPolygon.clear();
+                    outPolygon.clear();
                     hardClear();
                 }
             }
@@ -111,16 +114,19 @@ public class Controller2D implements Controller {
 
     private void updatePolygon() {
         hardClear();
+        if (clipPolygon.points.size() >= 3)
+            outPolygon = Clipper.clip(polygon, clipPolygon);
         if (polygon.points.size() > 0)
             polygonRasterizer.rasterize(polygon, Color.CYAN);
         if (clipPolygon.points.size() > 0)
             polygonRasterizer.rasterize(clipPolygon, Color.RED);
-    }
-
-    private void update() {
-//        panel.clear();
-        //TODO
-
+        if (outPolygon.points.size() > 0) {
+            polygonRasterizer.rasterize(outPolygon, Color.WHITE);
+            scanLine.setFillColor(Color.WHITE.getRGB());
+            scanLine.setOutlineColor(Color.WHITE);
+            scanLine.setPoly(outPolygon);
+            scanLine.fill();
+        }
     }
 
     private void hardClear() {

@@ -3,6 +3,7 @@ package render;
 import model.Scene;
 import model.Solid;
 import model.Vertex;
+import rasterize.LineRasterizer;
 import transforms.Mat4;
 
 public class Renderer {

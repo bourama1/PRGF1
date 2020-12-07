@@ -28,13 +28,7 @@ public class Renderer {
 
     public void render(Scene scene){
         //axis
-        Point3D a = new Point3D(scene.getSolids().get(0).getVertices().get(0).getPosition());
-        Point3D b = new Point3D(scene.getSolids().get(0).getVertices().get(1).getPosition());
-        Point3D c = new Point3D(scene.getSolids().get(0).getVertices().get(2).getPosition());
-        Point3D d = new Point3D(scene.getSolids().get(0).getVertices().get(3).getPosition());
-        renderAxes(a, b, Color.BLUE.getRGB());
-        renderAxes(a, c, Color.RED.getRGB());
-        renderAxes(a, d, Color.YELLOW.getRGB());
+        scene.getSolids().get(0).render(bufferedImage, false);
 
         //tetra
 
@@ -75,61 +69,5 @@ public class Renderer {
     }
 
 
-    private void renderAxes(Point3D pA, Point3D pB, int color) {
-        if (Math.min(pA.getW(), pB.getW()) < 0.0D)
-            return;
-        Optional<Vec3D> a = pA.dehomog();
-        Optional<Vec3D> b = pB.dehomog();
-        if (this.clip && (Math.min(a.get().getX(), b.get().getX()) < -1.0D || Math.max(a.get().getX(), b.get().getX()) > 1.0D ||
-                Math.min(a.get().getY(), b.get().getY()) < -1.0D || Math.max(a.get().getY(), b.get().getY()) > 1.0D ||
-                Math.min(a.get().getZ(), b.get().getZ()) < 0.0D || Math.max(a.get().getZ(), b.get().getZ()) > 1.0D))
-            return;
-        a = Optional.ofNullable(viewPort(a));
-        b = Optional.ofNullable(viewPort(b));
-        Graphics g = this.bufferedImage.getGraphics();
-        g.setColor(new Color(color));
-        g.drawLine((int)a.get().getX(), (int)a.get().getY(), (int)b.get().getX(), (int)b.get().getY());
-        if (color == 255)
-            g.drawString("x", (int)b.get().getX(), (int)b.get().getY());
-        if (color == 65280)
-            g.drawString("y", (int)b.get().getX(), (int)b.get().getY());
-        if (color == 16711680)
-            g.drawString("z", (int)b.get().getX(), (int)b.get().getY());
-    }
 
-
-    private Vec3D viewPort(Optional<Vec3D> a) {
-        int w = this.bufferedImage.getWidth();
-        int h = this.bufferedImage.getHeight();
-        int px = 0;
-        int py = 0;
-        switch (1) {
-            case 1:
-                px = 0;
-                py = 0;
-                w = this.bufferedImage.getWidth() / 2;
-                h = this.bufferedImage.getHeight() / 2;
-                break;
-            case 2:
-                px = 2;
-                py = 0;
-                w = this.bufferedImage.getWidth() / 2;
-                h = this.bufferedImage.getHeight() / 2;
-                break;
-            case 3:
-                px = 0;
-                py = 2;
-                w = this.bufferedImage.getWidth() / 2;
-                h = this.bufferedImage.getHeight() / 2;
-                break;
-            case 4:
-                px = 2;
-                py = 2;
-                w = this.bufferedImage.getWidth() / 2;
-                h = this.bufferedImage.getHeight() / 2;
-                break;
-        }
-        return a.get().mul(new Vec3D(1.0D, -1.0D, 1.0D)).add(new Vec3D((1 + px), (1 + py), 0.0D))
-                .mul(new Vec3D(((w - 1) / 2), ((h - 1) / 2), 1.0D));
-    }
 }

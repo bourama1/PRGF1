@@ -2,6 +2,12 @@ package solids;
 
 import model.Solid;
 import model.Vertex;
+import transforms.Point3D;
+import transforms.Vec3D;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.Optional;
 
 public class Tetrahedron extends Solid {
     public Tetrahedron() {
@@ -17,6 +23,5 @@ public class Tetrahedron extends Solid {
         indices.add(1); indices.add(2);
         indices.add(1); indices.add(3);
         indices.add(2); indices.add(3);
-        //todo ...
     }
 }

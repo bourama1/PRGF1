@@ -7,13 +7,15 @@ import fill.SeedFillBorder;
 import model.Point;
 import model.Polygon;
 import model.Scene;
-import rasterize.*;
-import solids.Axis;
-import solids.Tetrahedron;
+import rasterize.DashLineRasterizer;
+import rasterize.FilledLineRasterizer;
+import rasterize.PolygonRasterizer;
+import rasterize.Raster;
+import solids.*;
 import view.Panel;
 import render.Renderer;
 
-import javax.swing.*;
+import javax.swing.SwingUtilities;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -21,7 +23,7 @@ public class Controller3D implements Controller {
 
     private final Panel panel;
 
-    private int x,y;
+    private int x,y, n = 0;
     private boolean dashedPolygon = false;
     private SeedFill seedFill;
     private SeedFillBorder seedFillBorder;
@@ -54,6 +56,7 @@ public class Controller3D implements Controller {
     public void draw(){
         scene.getSolids().add(new Axis());
         scene.getSolids().add(new Tetrahedron());
+        scene.getSolids().add(new Box());
         renderer.render(scene);
     }
 
@@ -101,14 +104,8 @@ public class Controller3D implements Controller {
         panel.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                //mazani datovych typu a vycisteni platna
-                if (e.getKeyCode() == KeyEvent.VK_C) {
-                    x = 0;
-                    y = 0;
-                    polygon.clear();
-                    clipPolygon.clear();
-                    outPolygon.clear();
-                    hardClear();
+                if (e.getKeyCode() == KeyEvent.VK_R) {
+                    reset();
                 }
             }
         });
@@ -147,4 +144,9 @@ public class Controller3D implements Controller {
         panel.clear();
     }
 
+    private void reset() {
+        hardClear();
+        scene.clear();
+        draw();
+    }
 }

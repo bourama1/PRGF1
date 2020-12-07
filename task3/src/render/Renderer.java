@@ -5,12 +5,8 @@ import model.Solid;
 import model.Vertex;
 import rasterize.LineRasterizer;
 import transforms.Mat4;
-import transforms.Point3D;
-import transforms.Vec3D;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Optional;
 
 public class Renderer {
     LineRasterizer lineRasterizer;
@@ -31,6 +27,10 @@ public class Renderer {
         scene.getSolids().get(0).render(bufferedImage, false);
 
         //tetra
+        scene.getSolids().get(1).render(bufferedImage, false);
+
+        //box
+        scene.getSolids().get(2).render(bufferedImage, false);
 
       //todo pro vsechna Solids
     }

@@ -12,4 +12,8 @@ public class Scene {
     public ArrayList<Solid> getSolids(){
         return solids;
     }
+
+    public void clear() {
+        solids.clear();
+    }
 }

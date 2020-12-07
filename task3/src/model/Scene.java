@@ -1,7 +1,15 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Scene {
-    List<Solid> solids;
+    ArrayList<Solid> solids;
+    public Scene() {
+        this.solids = new ArrayList<>();
+    }
+
+    public ArrayList<Solid> getSolids(){
+        return solids;
+    }
 }

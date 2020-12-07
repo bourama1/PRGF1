@@ -6,17 +6,18 @@ import fill.SeedFill;
 import fill.SeedFillBorder;
 import model.Point;
 import model.Polygon;
-import rasterize.DashLineRasterizer;
-import rasterize.FilledLineRasterizer;
-import rasterize.PolygonRasterizer;
-import rasterize.Raster;
+import model.Scene;
+import rasterize.*;
+import solids.Axis;
+import solids.Tetrahedron;
 import view.Panel;
+import render.Renderer;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class Controller2D implements Controller {
+public class Controller3D implements Controller {
 
     private final Panel panel;
 
@@ -29,18 +30,31 @@ public class Controller2D implements Controller {
     private final Polygon clipPolygon = new Polygon();
     private Polygon outPolygon = new Polygon();
     private PolygonRasterizer polygonRasterizer;
+    private Scene scene;
+    private Renderer renderer;
+    private FilledLineRasterizer lineRasterizer;
 
-    public Controller2D(Panel panel) {
+    public Controller3D(Panel panel) {
         this.panel = panel;
         initObjects(panel.getRaster());
         initListeners(panel);
+        draw();
     }
 
     public void initObjects(Raster raster) {
+        lineRasterizer = new FilledLineRasterizer(raster);
+        scene = new Scene();
+        renderer = new Renderer(lineRasterizer, raster.getImg());
         seedFill = new SeedFill(raster);
         seedFillBorder = new SeedFillBorder(raster);
         scanLine = new ScanLine(raster);
-        polygonRasterizer = new PolygonRasterizer(new FilledLineRasterizer(raster), new DashLineRasterizer(raster));
+        polygonRasterizer = new PolygonRasterizer(lineRasterizer, new DashLineRasterizer(raster));
+    }
+
+    public void draw(){
+        scene.getSolids().add(new Axis());
+        scene.getSolids().add(new Tetrahedron());
+        renderer.render(scene);
     }
 
     @Override

@@ -11,16 +11,15 @@ public class Vertex {
     }
 
     public Vertex(Point3D p){
-        //this(p.getX(), p.getY(), p.getY());
-        position = p;
-        //position = new Point3D(p);
-
+        position = new Point3D(p);
     }
 
     public Vertex transform(Mat4 matrix) {
-        //Point3D p = position.mul(matrix);
-        //return new Vertex(p.getX(), p.getY(), p.getZ());
         return  new Vertex(position.mul(matrix));
+    }
+
+    public Point3D getPosition(){
+        return position;
     }
     //color
     //...

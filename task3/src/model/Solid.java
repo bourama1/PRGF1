@@ -11,4 +11,12 @@ public class Solid {
         vertices = new ArrayList<>();
         indices = new ArrayList<>();
     }
+
+    public List<Vertex> getVertices(){
+        return vertices;
+    }
+
+    public List<Integer> getIndices(){
+        return indices;
+    }
 }

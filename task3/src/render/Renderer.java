@@ -92,16 +92,16 @@ public class Renderer {
             vb = pB.dehomog().get();
 
         //Clip
-        if ((Math.min(va.getX(), vb.getX()) < -1.0D || Math.max(va.getX(), vb.getX()) > 1.0D ||
+        /*if ((Math.min(va.getX(), vb.getX()) < -1.0D || Math.max(va.getX(), vb.getX()) > 1.0D ||
              Math.min(va.getY(), vb.getY()) < -1.0D || Math.max(va.getY(), vb.getY()) > 1.0D ||
              Math.min(va.getZ(), vb.getZ()) < 0.0D || Math.max(va.getZ(), vb.getZ()) > 1.0D))
-            return;
+            return;*/
 
         //ViewPort
         int x1 = (int) ((va.getX() + 1) * (raster.getWidth() - 1 ) / 2);
-        int y1 = (int) ((va.getY() + 1) * (raster.getWidth() - 1 ) / 2);
+        int y1 = (int) ((1 - va.getY()) * (raster.getHeight() - 1 ) / 2);
         int x2 = (int) ((vb.getX() + 1) * (raster.getWidth() - 1 ) / 2);
-        int y2 = (int) ((vb.getY() + 1) * (raster.getWidth() - 1 ) / 2);
+        int y2 = (int) ((1 - vb.getY()) * (raster.getHeight() - 1 ) / 2);
 
         if (active)
             color = Color.YELLOW.getRGB();

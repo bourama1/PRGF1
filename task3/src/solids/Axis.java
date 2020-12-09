@@ -8,9 +8,9 @@ public class Axis extends Solid {
         super();
 
         vertices.add(new Vertex(0, 0, 0));
-        vertices.add(new Vertex(5, 0, 0));
-        vertices.add(new Vertex(0, 5, 0));
-        vertices.add(new Vertex(0, 0, 5));
+        vertices.add(new Vertex(3, 0, 0));
+        vertices.add(new Vertex(0, 3, 0));
+        vertices.add(new Vertex(0, 0, 3));
 
         indices.add(0); indices.add(1);
         indices.add(0); indices.add(2);

@@ -1,5 +1,6 @@
 package model;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,5 +16,13 @@ public class Scene {
 
     public void clear() {
         solids.clear();
+    }
+
+    public Solid getActiveSolid() {
+        for (Solid solid: solids) {
+            if (solid.active)
+                return solid;
+        }
+        return null;
     }
 }

@@ -13,16 +13,16 @@ public class Axis extends Solid {
     public Axis(){
         super();
         vertices.add(new Vertex(0, 0, 0));
-        vertices.add(new Vertex(10, 0, 0));
-        vertices.add(new Vertex(0, 10, 0));
-        vertices.add(new Vertex(0, 0, 10));
+        vertices.add(new Vertex(5, 0, 0));
+        vertices.add(new Vertex(0, 5, 0));
+        vertices.add(new Vertex(0, 0, 5));
 
         indices.add(0); indices.add(1);
         indices.add(0); indices.add(2);
         indices.add(0); indices.add(3);
 
-        color.add(255);
-        color.add(65280);
         color.add(16711680);
+        color.add(65280);
+        color.add(255);
     }
 }

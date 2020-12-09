@@ -22,13 +22,11 @@ public class Renderer {
     private Mat4 model = new Mat4Identity();
     private Mat4 view = new Mat4Identity();
     private Mat4 projection = new Mat4Identity();
-    private boolean clip;
 
     public Renderer(LineRasterizer lineRasterizer, BufferedImage bufferedImage, Raster raster){
         this.lineRasterizer = lineRasterizer;
         this.raster = raster;
         this.bufferedImage = bufferedImage;
-        clip = false;
     }
 
     public void setModel(Mat4 model) {
@@ -55,18 +53,19 @@ public class Renderer {
         if(size == 6)
             axis = true;
 
+        model = solid.getModel();
         Mat4 m = model.mul(view).mul(projection);
-        List<Vertex> transformedVerticies = new ArrayList<Vertex>();
+        List<Vertex> transformedVertices = new ArrayList<Vertex>();
 
         for (Vertex v: solid.getVertices()) {
-            transformedVerticies.add(v.transform(m));
+            transformedVertices.add(v.transform(m));
         }
 
         for (int i = 0; i < size; i += 2){
-            renderLine(transformedVerticies.get(solid.getIndices().get(i)).getPosition(),
-                    transformedVerticies.get(solid.getIndices().get(i + 1)).getPosition(),
+            renderLine(transformedVertices.get(solid.getIndices().get(i)).getPosition(),
+                    transformedVertices.get(solid.getIndices().get(i + 1)).getPosition(),
                     axis? solid.getColor().get(i / 2) : Color.CYAN.getRGB(),
-                    clip, bufferedImage, axis);
+                    bufferedImage, axis, solid.getActive());
         }
 
 
@@ -76,13 +75,10 @@ public class Renderer {
         //projekcni (transformace zobrazovaciho objemu)
         //Model - View - Projection
         //orezani - fast clip
-        //dehomogenizace
         //projekce
-        //viewport transformace
-        //vykresleni pomoci linerasterizeru
     }
 
-    protected void renderLine(Point3D pA, Point3D pB, int color, boolean clip, BufferedImage bufferedImage, boolean axis) {
+    protected void renderLine(Point3D pA, Point3D pB, int color, BufferedImage bufferedImage, boolean axis, boolean active) {
         int size = 3;
         if (Math.min(pA.getW(), pB.getW()) < 0.0D)
             return;
@@ -95,10 +91,11 @@ public class Renderer {
         if(pB.dehomog().isPresent())
             vb = pB.dehomog().get();
 
-        if (clip && (Math.min(va.getX(), vb.getX()) < -1.0D || Math.max(va.getX(), vb.getX()) > 1.0D ||
-                Math.min(va.getY(), vb.getY()) < -1.0D || Math.max(va.getY(), vb.getY()) > 1.0D ||
-                Math.min(va.getZ(), vb.getZ()) < 0.0D || Math.max(va.getZ(), vb.getZ()) > 1.0D))
-            return;
+        //Clip
+        /*if ((Math.min(va.getX(), vb.getX()) < -1.0D || Math.max(va.getX(), vb.getX()) > 1.0D ||
+             Math.min(va.getY(), vb.getY()) < -1.0D || Math.max(va.getY(), vb.getY()) > 1.0D ||
+             Math.min(va.getZ(), vb.getZ()) < 0.0D || Math.max(va.getZ(), vb.getZ()) > 1.0D))
+            return;*/
 
         //ViewPort
         int x1 = (int) ((va.getX() + 1) * (raster.getWidth() - 1 ) / 2);
@@ -106,20 +103,21 @@ public class Renderer {
         int x2 = (int) ((vb.getX() + 1) * (raster.getWidth() - 1 ) / 2);
         int y2 = (int) ((vb.getY() + 1) * (raster.getWidth() - 1 ) / 2);
 
+        if (active && !axis)
+            color = Color.YELLOW.getRGB();
         Graphics g = bufferedImage.getGraphics();
         g.setColor(new Color(color));
-        //lineRasterizer.rasterize(x1, y1, x2, y2, new Color(color));
-        g.drawLine(x1, y1, x2, y2);
+        lineRasterizer.rasterize(x1, y1, x2, y2, new Color(color));
         if (axis){
-            if (color == 255)
+            if (color == 16711680)
                 g.drawString("x", x2, y2);
             if (color == 65280)
                 g.drawString("y", x2, y2);
-            if (color == 16711680)
+            if (color == 255)
                 g.drawString("z", x2, y2);
-        } else {
+        }/* else {
             g.drawOval(x1 - size, y1 - size, 2 * size, 2 * size);
             g.drawOval(x2 - size, y2 - size, 2 * size, 2 * size);
-        }
+        }*/
     }
 }

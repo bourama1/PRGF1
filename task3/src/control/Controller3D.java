@@ -21,7 +21,6 @@ public class Controller3D implements Controller {
 
     private int x, y, h, w, n;
     private boolean per = false;
-    private float angle;
     private Scene scene;
     private Renderer renderer;
     private Camera camera = new Camera()
@@ -39,7 +38,7 @@ public class Controller3D implements Controller {
     public void initObjects(Raster raster) {
         FilledLineRasterizer lineRasterizer = new FilledLineRasterizer(raster);
         renderer = new Renderer(lineRasterizer, raster.getImg(), raster);
-        Mat4 model = new Mat4RotXYZ(angle * Math.PI/10, Math.PI/5, angle * Math.PI/7);
+        Mat4 model = new Mat4Identity();
         renderer.setModel(model);
         scene = new Scene();
         scene.getSolids().add(new Axis());

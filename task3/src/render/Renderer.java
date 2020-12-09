@@ -79,7 +79,6 @@ public class Renderer {
     }
 
     protected void renderLine(Point3D pA, Point3D pB, int color, BufferedImage bufferedImage, boolean axis, boolean active) {
-        int size = 3;
         if (Math.min(pA.getW(), pB.getW()) < 0.0D)
             return;
 
@@ -92,10 +91,10 @@ public class Renderer {
             vb = pB.dehomog().get();
 
         //Clip
-        /*if ((Math.min(va.getX(), vb.getX()) < -1.0D || Math.max(va.getX(), vb.getX()) > 1.0D ||
+        if ((Math.min(va.getX(), vb.getX()) < -1.0D || Math.max(va.getX(), vb.getX()) > 1.0D ||
              Math.min(va.getY(), vb.getY()) < -1.0D || Math.max(va.getY(), vb.getY()) > 1.0D ||
              Math.min(va.getZ(), vb.getZ()) < 0.0D || Math.max(va.getZ(), vb.getZ()) > 1.0D))
-            return;*/
+            return;
 
         //ViewPort
         int x1 = (int) ((va.getX() + 1) * (raster.getWidth() - 1 ) / 2);
@@ -115,9 +114,6 @@ public class Renderer {
                 g.drawString("y", x2, y2);
             if (color == 255)
                 g.drawString("z", x2, y2);
-        }/* else {
-            g.drawOval(x1 - size, y1 - size, 2 * size, 2 * size);
-            g.drawOval(x2 - size, y2 - size, 2 * size, 2 * size);
-        }*/
+        }
     }
 }

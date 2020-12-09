@@ -12,6 +12,7 @@ import solids.Tetrahedron;
 import transforms.*;
 import view.Panel;
 
+import javax.swing.*;
 import java.awt.event.*;
 
 public class Controller3D implements Controller {
@@ -19,10 +20,10 @@ public class Controller3D implements Controller {
     private final Panel panel;
 
     private int x, y, h, w, n;
+    private boolean per = false;
     private float angle;
     private Scene scene;
     private Renderer renderer;
-    private FilledLineRasterizer lineRasterizer;
     private Camera camera = new Camera()
             .withPosition(new Vec3D(-5, 0 ,0))
             .withAzimuth(0)
@@ -36,12 +37,10 @@ public class Controller3D implements Controller {
     }
 
     public void initObjects(Raster raster) {
-        lineRasterizer = new FilledLineRasterizer(raster);
+        FilledLineRasterizer lineRasterizer = new FilledLineRasterizer(raster);
         renderer = new Renderer(lineRasterizer, raster.getImg(), raster);
         Mat4 model = new Mat4RotXYZ(angle * Math.PI/10, Math.PI/5, angle * Math.PI/7);
         renderer.setModel(model);
-        renderer.setProjection(new Mat4PerspRH(Math.PI/2, h/(double)w, 0.1, 10));
-        renderer.setView(camera.getViewMatrix());
         scene = new Scene();
         scene.getSolids().add(new Axis());
         scene.getSolids().add(new Tetrahedron(model));
@@ -50,14 +49,13 @@ public class Controller3D implements Controller {
         h = raster.getHeight();
         w = raster.getWidth();
         n = 1;
-        setActive();
     }
 
     public void update() {
         panel.clear();
-        renderer.setModel(scene.getActiveSolid().getModel());
-        renderer.setProjection(new Mat4PerspRH(Math.PI/2, h/(double)w, 0.1, 10));
+        setProjection();
         renderer.setView(camera.getViewMatrix());
+        setActive();
         renderer.render(scene);
     }
 
@@ -66,8 +64,11 @@ public class Controller3D implements Controller {
         panel.addMouseListener(new MouseAdapter() {
 
             @Override
-            public void mouseReleased(MouseEvent e) {
-
+            public void mousePressed(MouseEvent e) {
+                if (SwingUtilities.isLeftMouseButton(e)) {
+                    x = e.getX();
+                    y = e.getY();
+                }
             }
         });
 
@@ -75,7 +76,13 @@ public class Controller3D implements Controller {
 
             @Override
             public void mouseDragged(MouseEvent e) {
-
+                if (SwingUtilities.isLeftMouseButton(e)){
+                    camera = camera.addAzimuth((Math.PI * (x - e.getX()) / w));
+                    camera = camera.addZenith((Math.PI * (e.getY() - y) / h));
+                    x = e.getX();
+                    y = e.getY();
+                }
+                update();
             }
         });
 
@@ -156,7 +163,10 @@ public class Controller3D implements Controller {
                 //Change of active solid
                 if (e.getKeyCode() == KeyEvent.VK_PAGE_UP) {
                     n = (n + 1) % (scene.getSolids().size() - 1) + 1;
-                    setActive();
+                }
+                //Projection
+                if(e.getKeyCode() == KeyEvent.VK_P) {
+                    per = !per;
                 }
                 update();
             }
@@ -176,5 +186,12 @@ public class Controller3D implements Controller {
         for (Solid solid: scene.getSolids()) {
             solid.setActive(scene.getSolids().indexOf(solid) == n);
         }
+    }
+
+    private void setProjection() {
+        if (per)
+            renderer.setProjection(new Mat4OrthoRH((w / 50.0), (h / 50.0), 0.1, 10));
+        else
+            renderer.setProjection(new Mat4PerspRH(Math.PI/2, h/(double)w, 0.1, 10));
     }
 }

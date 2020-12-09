@@ -51,7 +51,6 @@ public class FilledLineRasterizer extends LineRasterizer {
                 balance += dy;
                 x += incX;
             }
-            raster.setPixel(x, y, color.getRGB());
         } else {
             dx <<= 1;
             balance = dx - dy;
@@ -66,7 +65,7 @@ public class FilledLineRasterizer extends LineRasterizer {
                 balance += dx;
                 y += incY;
             }
-            raster.setPixel(x, y, color.getRGB());
         }
+        raster.setPixel(x, y, color.getRGB());
     }
 }

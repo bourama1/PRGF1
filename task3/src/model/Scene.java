@@ -12,10 +12,6 @@ public class Scene {
         return solids;
     }
 
-    public void clear() {
-        solids.clear();
-    }
-
     public Solid getActiveSolid() {
         for (Solid solid: solids) {
             if (solid.active)

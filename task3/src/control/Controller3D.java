@@ -32,31 +32,25 @@ public class Controller3D implements Controller {
         this.panel = panel;
         initObjects(panel.getRaster());
         initListeners(panel);
-        initScene();
+        update();
     }
 
     public void initObjects(Raster raster) {
         lineRasterizer = new FilledLineRasterizer(raster);
-        scene = new Scene();
         renderer = new Renderer(lineRasterizer, raster.getImg(), raster);
-        h = raster.getHeight();
-        w = raster.getWidth();
-        n = 1;
-    }
-
-    public void initScene(){
-        panel.clear();
         Mat4 model = new Mat4RotXYZ(angle * Math.PI/10, Math.PI/5, angle * Math.PI/7);
         renderer.setModel(model);
         renderer.setProjection(new Mat4PerspRH(Math.PI/2, h/(double)w, 0.1, 10));
         renderer.setView(camera.getViewMatrix());
-
+        scene = new Scene();
         scene.getSolids().add(new Axis());
         scene.getSolids().add(new Tetrahedron(model));
         scene.getSolids().add(new Box(model));
         scene.getSolids().add(new Curve(model));
+        h = raster.getHeight();
+        w = raster.getWidth();
+        n = 1;
         setActive();
-        renderer.render(scene);
     }
 
     public void update() {
@@ -173,16 +167,14 @@ public class Controller3D implements Controller {
             public void componentResized(ComponentEvent e) {
                 panel.resize();
                 initObjects(panel.getRaster());
+                update();
             }
         });
     }
 
     private void setActive() {
         for (Solid solid: scene.getSolids()) {
-            if (scene.getSolids().indexOf(solid) != n)
-                solid.setActive(false);
-            else
-                solid.setActive(true);
+            solid.setActive(scene.getSolids().indexOf(solid) == n);
         }
     }
 }

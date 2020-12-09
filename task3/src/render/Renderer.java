@@ -64,7 +64,7 @@ public class Renderer {
         for (int i = 0; i < size; i += 2){
             renderLine(transformedVertices.get(solid.getIndices().get(i)).getPosition(),
                     transformedVertices.get(solid.getIndices().get(i + 1)).getPosition(),
-                    axis? solid.getColor().get(i / 2) : Color.CYAN.getRGB(),
+                    solid.getColor().get(i / 2 % solid.getColor().size()),
                     bufferedImage, axis, solid.getActive());
         }
 
@@ -92,10 +92,10 @@ public class Renderer {
             vb = pB.dehomog().get();
 
         //Clip
-        /*if ((Math.min(va.getX(), vb.getX()) < -1.0D || Math.max(va.getX(), vb.getX()) > 1.0D ||
+        if ((Math.min(va.getX(), vb.getX()) < -1.0D || Math.max(va.getX(), vb.getX()) > 1.0D ||
              Math.min(va.getY(), vb.getY()) < -1.0D || Math.max(va.getY(), vb.getY()) > 1.0D ||
              Math.min(va.getZ(), vb.getZ()) < 0.0D || Math.max(va.getZ(), vb.getZ()) > 1.0D))
-            return;*/
+            return;
 
         //ViewPort
         int x1 = (int) ((va.getX() + 1) * (raster.getWidth() - 1 ) / 2);
@@ -103,7 +103,7 @@ public class Renderer {
         int x2 = (int) ((vb.getX() + 1) * (raster.getWidth() - 1 ) / 2);
         int y2 = (int) ((vb.getY() + 1) * (raster.getWidth() - 1 ) / 2);
 
-        if (active && !axis)
+        if (active)
             color = Color.YELLOW.getRGB();
         Graphics g = bufferedImage.getGraphics();
         g.setColor(new Color(color));

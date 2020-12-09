@@ -6,6 +6,8 @@ import transforms.Cubic;
 import transforms.Mat4;
 import transforms.Point3D;
 
+import java.awt.*;
+
 public class Curve extends Solid{
     public Curve(Mat4 model) {
         super();
@@ -38,6 +40,8 @@ public class Curve extends Solid{
         getIndices().add(7); getIndices().add(8);
         getIndices().add(8); getIndices().add(9);
         getIndices().add(9); getIndices().add(10);
+
+        color.add(Color.CYAN.getRGB());
 
         this.model = model;
     }
